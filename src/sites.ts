@@ -10,10 +10,10 @@ export async function getSites(robot: Robot, language: Language, numberOfSites: 
   const siteMapUrl = robot.getSitemaps()[0]
   const siteMapXml = await axios.get(siteMapUrl)
   const siteMap = await parseStringPromise(siteMapXml.data)
-  const highestPrioritySites = _(siteMap.urlset.url)
+  return _(siteMap.urlset.url)
     .sortBy(site => parseFloat(site.priority[0]))
     .reverse()
-    .map(site => {
+    .map<string>(site => {
       if (site['xhtml:link']) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -25,8 +25,7 @@ export async function getSites(robot: Robot, language: Language, numberOfSites: 
       return site.loc[0]
     })
     .uniq()
-    .filter(url => robot.isAllowed(url, UserAgent))
+    .filter(url => Boolean(robot.isAllowed(url, UserAgent)))
     .take(numberOfSites)
     .value()
-  console.log(JSON.stringify(highestPrioritySites, null, 2))
 }

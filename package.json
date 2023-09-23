@@ -16,6 +16,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@types/bluebird": "^3.5.39",
     "@types/cheerio": "^0.22.32",
     "@types/html-to-text": "^9.0.2",
     "@types/lodash": "^4.14.199",
@@ -23,6 +24,7 @@
     "@types/x-ray": "^2.3.4",
     "@types/xml2js": "^0.4.12",
     "axios": "^1.5.0",
+    "bluebird": "^3.7.2",
     "cheerio": "^1.0.0-rc.12",
     "fast-xml-parser": "^4.3.0",
     "html-to-text": "^9.0.5",
