@@ -1,10 +1,13 @@
+import type { Robot } from 'robots-parser'
 import axios from 'axios';
 import { parseStringPromise } from 'xml2js';
 import _ from 'lodash'
+import { UserAgent } from './robot';
 
 export type Language = 'en' | 'fi' | 'sv'
 
-export async function getSites(siteMapUrl: string, language: Language, numberOfSites: number = 100) {
+export async function getSites(robot: Robot, language: Language, numberOfSites: number = 100) {
+  const siteMapUrl = robot.getSitemaps()[0]
   const siteMapXml = await axios.get(siteMapUrl)
   const siteMap = await parseStringPromise(siteMapXml.data)
   const highestPrioritySites = _(siteMap.urlset.url)
@@ -22,6 +25,7 @@ export async function getSites(siteMapUrl: string, language: Language, numberOfS
       return site.loc[0]
     })
     .uniq()
+    .filter(url => robot.isAllowed(url, UserAgent))
     .take(numberOfSites)
     .value()
   console.log(JSON.stringify(highestPrioritySites, null, 2))

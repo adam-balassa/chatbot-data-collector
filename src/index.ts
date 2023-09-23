@@ -1,3 +1,5 @@
+// import { getSites } from './sites';
+import { getRobotsTxt } from './robot';
 import { getSites } from './sites';
 // import { convert } from 'html-to-text';
 // // import cheerio from 'cheerio'
@@ -15,7 +17,8 @@ async function main() {
   // console.log(convert(await page.content()))
   // await page.$eval('h1', data => { console.log(data) })
   // await browser.close()
-  await getSites('https://www.ayy.fi/sitemap.xml', 'en', 10)
+  const robot = await getRobotsTxt('https://www.ayy.fi')
+  await getSites(robot, 'en', 10)
 }
 
 main().then(() => {

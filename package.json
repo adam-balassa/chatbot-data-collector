@@ -28,7 +28,7 @@
     "html-to-text": "^9.0.5",
     "lodash": "^4.17.21",
     "puppeteer": "^21.3.3",
-    "robots-txt-parser": "^2.0.3",
+    "robots-parser": "^3.0.1",
     "ts-node": "^10.9.1",
     "x-ray": "^2.3.4",
     "xml2js": "^0.6.2"
