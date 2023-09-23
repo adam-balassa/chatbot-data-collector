@@ -18,14 +18,19 @@
   "dependencies": {
     "@types/cheerio": "^0.22.32",
     "@types/html-to-text": "^9.0.2",
+    "@types/lodash": "^4.14.199",
     "@types/puppeteer": "^7.0.4",
     "@types/x-ray": "^2.3.4",
+    "@types/xml2js": "^0.4.12",
+    "axios": "^1.5.0",
     "cheerio": "^1.0.0-rc.12",
+    "fast-xml-parser": "^4.3.0",
     "html-to-text": "^9.0.5",
     "lodash": "^4.17.21",
     "puppeteer": "^21.3.3",
     "robots-txt-parser": "^2.0.3",
     "ts-node": "^10.9.1",
-    "x-ray": "^2.3.4"
+    "x-ray": "^2.3.4",
+    "xml2js": "^0.6.2"
   }
 }
