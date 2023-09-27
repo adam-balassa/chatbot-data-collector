@@ -4,13 +4,13 @@ import type { Browser, Page } from 'puppeteer';
 import bluebird from 'bluebird'
 import cheerio from 'cheerio'
 
-export async function scrapeSites(sites: string[], delayMs = 100) {
+export async function scrapeSites(baseUrl: string, sites: string[], delayMs = 100) {
   // TODO: revisit concurrency here!
   return await withBrowser(async (browser) => {
     return bluebird.map(sites, async (site) => {
       return withPage(browser)(async (page) => {
         const wait = new Promise(resolve => setTimeout(resolve, delayMs))
-        const result = scrapeSite(site, page)
+        const result = scrapeSite(baseUrl, site, page)
         await wait
         return result
       });
@@ -18,7 +18,7 @@ export async function scrapeSites(sites: string[], delayMs = 100) {
   });
 }
 
-async function scrapeSite(siteUrl: string, page: Page) {
+async function scrapeSite(baseUrl: string, siteUrl: string, page: Page) {
   console.log(siteUrl)
   await page.goto(siteUrl);
   const content = await page.content()
@@ -37,7 +37,7 @@ async function scrapeSite(siteUrl: string, page: Page) {
         walk(elem.children, builder);
         builder.addInline(': ');
         builder.closeBlock({ trailingLineBreaks: 0 });
-      }
+      },
     },
     selectors: [
       {
@@ -53,7 +53,12 @@ async function scrapeSite(siteUrl: string, page: Page) {
       { selector: 'nav', format: 'skip' },
       { selector: 'footer', format: 'skip' },
       { selector: 'img', format: 'skip' },
-      { selector: 'a', format: 'skip' },
+      {
+        selector: 'a',
+        options: {
+          baseUrl,
+        }
+      },
       { selector: 'svg', format: 'skip' },
       { selector: 'hr', format: 'skip' },
       { selector: 'wbr', format: 'skip' },
