@@ -6,7 +6,7 @@ import { UserAgent } from './robot';
 
 export type Language = 'en' | 'fi' | 'sv'
 
-export async function getSites(robot: Robot, language: Language, numberOfSites: number = 100) {
+export async function getSites(robot: Robot, language: Language, numberOfSites = 100) {
   const siteMapUrl = robot.getSitemaps()[0]
   const siteMapXml = await axios.get(siteMapUrl)
   const siteMap = await parseStringPromise(siteMapXml.data)
@@ -24,7 +24,7 @@ export async function getSites(robot: Robot, language: Language, numberOfSites: 
       }
       return site.loc[0]
     })
-    .uniq()
+    .uniqBy(url => new URL(url).pathname)
     .filter(url => Boolean(robot.isAllowed(url, UserAgent)))
     .take(numberOfSites)
     .value()

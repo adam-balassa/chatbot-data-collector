@@ -4,7 +4,7 @@ import type { Browser, Page } from 'puppeteer';
 import bluebird from 'bluebird'
 import cheerio from 'cheerio'
 
-export async function scrapeSites(sites: string[], delayMs: number = 100) {
+export async function scrapeSites(sites: string[], delayMs = 100) {
   // TODO: revisit concurrency here!
   return await withBrowser(async (browser) => {
     return bluebird.map(sites, async (site) => {
@@ -14,16 +14,67 @@ export async function scrapeSites(sites: string[], delayMs: number = 100) {
         await wait
         return result
       });
-    }, { concurrency:  3 });
+    }, { concurrency: 3 });
   });
 }
 
 async function scrapeSite(siteUrl: string, page: Page) {
+  console.log(siteUrl)
   await page.goto(siteUrl);
   const content = await page.content()
   const $ = cheerio.load(content)
-  console.log($('h1').text())
-  return convert(content)
+  const body = $('body')
+  const main = body.has('main').length ? body.find('main') : body
+  return convert(main.html() ?? '', {
+    preserveNewlines: false,
+    wordwrap: false,
+    encodeCharacters: {
+      '\u00A0': ' '
+    },
+    formatters: {
+      h3Formatter: (elem, walk, builder) => {
+        builder.openBlock({ leadingLineBreaks: 0 });
+        walk(elem.children, builder);
+        builder.addInline(': ');
+        builder.closeBlock({ trailingLineBreaks: 0 });
+      }
+    },
+    selectors: [
+      {
+        selector: '*',
+        options: {
+          trimEmptyLines: true,
+          trailingLineBreaks: 0,
+          leadingLineBreaks: 0
+        }
+      },
+      { selector: 'header', format: 'skip' },
+      { selector: 'aside', format: 'skip' },
+      { selector: 'nav', format: 'skip' },
+      { selector: 'footer', format: 'skip' },
+      { selector: 'img', format: 'skip' },
+      { selector: 'a', format: 'skip' },
+      { selector: 'svg', format: 'skip' },
+      { selector: 'hr', format: 'skip' },
+      { selector: 'wbr', format: 'skip' },
+      { selector: 'br', format: 'skip' },
+      {
+        selector: 'h3',
+        format: 'h3Formatter',
+        options: {
+          leadingLineBreaks: 2,
+          trailingLineBreaks: 1,
+        }
+      },
+      {
+        selector: 'p',
+        options: {
+          leadingLineBreaks: 1,
+          trailingLineBreaks: 2,
+        }
+      }
+    ]
+  })
 }
 
 const withPage = <T> (browser: Browser) => async (fn: (page: Page) => T) => {
