@@ -25,6 +25,7 @@
     "@types/xml2js": "^0.4.12",
     "axios": "^1.5.0",
     "bluebird": "^3.7.2",
+    "chatgpt": "^5.2.5",
     "cheerio": "^1.0.0-rc.12",
     "fast-xml-parser": "^4.3.0",
     "html-to-text": "^9.0.5",
@@ -33,6 +34,7 @@
     "robots-parser": "^3.0.1",
     "ts-node": "^10.9.1",
     "x-ray": "^2.3.4",
-    "xml2js": "^0.6.2"
+    "xml2js": "^0.6.2",
+    "zip-a-folder": "^3.1.3"
   }
 }

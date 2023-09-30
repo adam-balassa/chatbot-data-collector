@@ -5,3 +5,6 @@ node_modules/
 .DS_Store
 .env.local
 .idea/
+outputs/
+output.zip
+.env
