@@ -1,10 +1,9 @@
 import { getRobotsTxt } from './robot';
 import { getSites } from './sites';
 import { scrapeSites } from './scraper';
-// import { zip } from 'zip-a-folder';
 import { generateJsonResponses } from './gptJsonGenerator';
 import * as fs from 'fs';
-// import * as path from 'path';
+import * as path from 'path';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -17,21 +16,20 @@ async function main() {
   sites.shift()
   result.shift()
   const jsonResponses = await generateJsonResponses(sites, result)
-  // await writeToFiles(sites, result)
+  await writeToFiles(sites, result)
 
   fs.writeFileSync('output1.txt', jsonResponses.join('\n\n\n\n----------------------------------------------------------------------------------------------------\n\n\n\n'))
 }
 
-// async function writeToFiles(sites: string[], contents: unknown[]) {
-//   sites.forEach((site, index) => {
-//     let pageContent = 'LINK TO PAGE: ' + site + '\n\n\n\n----------------------------------------------------------------------------------------------------\n\n\n\n'
-//     pageContent = pageContent + contents[index]
-//     const filePath = 'outputs'
-//     const fileName = 'page_' + index + '.txt'
-//     fs.writeFileSync(path.join(filePath, fileName), pageContent)
-//   })
-//   await zip('outputs', 'outputs.zip');
-// }
+async function writeToFiles(sites: string[], contents: unknown[]) {
+  sites.forEach((site, index) => {
+    let pageContent = 'LINK TO PAGE: ' + site + '\n\n\n\n----------------------------------------------------------------------------------------------------\n\n\n\n'
+    pageContent = pageContent + contents[index]
+    const filePath = 'outputs'
+    const fileName = 'page_' + index + '.txt'
+    fs.writeFileSync(path.join(filePath, fileName), pageContent)
+  })
+}
 
 main().then(() => {
   console.log('Successful scraping')
