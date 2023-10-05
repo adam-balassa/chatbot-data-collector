@@ -18,6 +18,7 @@
   "dependencies": {
     "@types/bluebird": "^3.5.39",
     "@types/cheerio": "^0.22.32",
+    "@types/dotenv": "^8.2.0",
     "@types/html-to-text": "^9.0.2",
     "@types/lodash": "^4.14.199",
     "@types/puppeteer": "^7.0.4",
@@ -27,6 +28,7 @@
     "bluebird": "^3.7.2",
     "chatgpt": "^5.2.5",
     "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^16.3.1",
     "fast-xml-parser": "^4.3.0",
     "html-to-text": "^9.0.5",
     "lodash": "^4.17.21",
